@@ -41,14 +41,15 @@ class App extends React.Component {
           });
         });
       
+    }else{
+      setCurrentUser(userAuth);
     }
-    setCurrentUser(userAuth);
+    
 
   });
   
 
   }
-
 
   componentWillUnmount(){
     this.unsubscribeFromAuth();

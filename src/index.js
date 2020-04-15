@@ -3,14 +3,19 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter} from 'react-router-dom';
 import './index.css';
 import App from './App';
-import {Provider} from 'react-redux';
+import {Provider} from 'react-redux';   //Gives access to store object of redux basically state
+import {PersistGate} from 'redux-persist/integration/react';
 
-import store from './redux/store';
+import {store, persistor} from './redux/store';
+
  
 ReactDOM.render(
     <Provider  store={store}>
         <BrowserRouter>
-        <App />
-        </BrowserRouter>,
+            <PersistGate persistor={persistor}>
+                <App /> 
+            </PersistGate>
+        </BrowserRouter>
     </Provider>,
- document.getElementById('root'));
+ document.getElementById('root')
+ );
