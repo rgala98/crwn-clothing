@@ -7,7 +7,7 @@ import rootReducer from './root-reducer';
 
 const middlewares = [];
 
-///////TO NOT DISPLAY CONSOLE LOGS OF OUR REDUX MESSAGES////////
+///////TO NOT DISPLAY CONSOLE LOGS OF OUR REDUX MESSAGES//////// 
 if (process.env.NODE_ENV === 'development'){
     middlewares.push(logger)
 }
