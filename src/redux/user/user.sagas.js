@@ -7,21 +7,20 @@ import {googleProvider, auth,createUserProfileDocument, getCurrentUser } from '.
 import  { signInFailure, signInSuccess, signOutFailure,signOutSuccess, signUpFailure, signUpSuccess} from './user.actions';
 
 
-export function* getSnapshotFromUserAuth(userAuth, additionalData){
-
-    try{
-        const userRef = yield call(createUserProfileDocument, userAuth,additionalData);
-
-        const userSnapshot = yield userRef.get();
-        yield put(signInSuccess({
-            id: userSnapshot.id, ...userSnapshot.data()
-        }));
+export function* getSnapshotFromUserAuth(userAuth, additionalData) {
+    try {
+      const userRef = yield call(
+        createUserProfileDocument,
+        userAuth,
+        additionalData
+      );
+      const userSnapshot = yield userRef.get();
+      yield put(signInSuccess({ id: userSnapshot.id, ...userSnapshot.data() }));
+    } catch (error) {
+      yield put(signInFailure(error));
     }
-    catch(error){
-        yield put(signInFailure(error));
-    }
-
-}
+  }
+  
 
 export function* signInWithGoogle(){
     try{
@@ -67,17 +66,14 @@ export function* signOut(){
     }
 }
 
-export function* signUp({payload: {displayName,email,password}}){
-    try{
-        const {user} = yield auth().createUserWithEmailAndPassword(email, password);
-
-        yield put(signUpSuccess({user, additionalData: {displayName}}));
-
-    }catch(error){
-        yield put(signUpFailure(error));
+export function* signUp({ payload: { email, password, displayName } }) {
+    try {
+      const { user } = yield auth.createUserWithEmailAndPassword(email, password);
+      yield put(signUpSuccess({ user, additionalData: { displayName } }));
+    } catch (error) {
+      yield put(signUpFailure(error));
     }
-
-}
+  }
 
 export function* signInAfterSignUp({payload: {user, additionalData}}){
     yield getSnapshotFromUserAuth(user,additionalData);
