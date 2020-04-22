@@ -18,3 +18,17 @@ export const selectCollection = collectionUrlPram => createSelector(
     [selectCollections],
     collections => (collections ? collections[collectionUrlPram] : null)
 );
+
+
+export const selectIsCollectionFetching = createSelector(
+    [selectShop],
+    shop => shop.isFetching
+)
+
+
+export const selectIsCollectionLoaded = createSelector(
+    [selectShop],
+    shop => !!shop.collections
+)
+
+// !! - converts any value to boolean 

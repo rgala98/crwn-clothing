@@ -5,7 +5,15 @@ import {persistStore} from 'redux-persist';
 
 import rootReducer from './root-reducer';
 
-const middlewares = [];
+import rootSaga from './root.saga';
+
+import createSagaMiddleware from 'redux-saga';
+
+
+
+const sagaMiddleware = createSagaMiddleware();
+
+const middlewares = [sagaMiddleware];
 
 ///////TO NOT DISPLAY CONSOLE LOGS OF OUR REDUX MESSAGES//////// 
 if (process.env.NODE_ENV === 'development'){
@@ -13,6 +21,8 @@ if (process.env.NODE_ENV === 'development'){
 }
 
 export const store = createStore(rootReducer, applyMiddleware(...middlewares));
+
+sagaMiddleware.run(rootSaga);
 
 export const persistor = persistStore(store);
 

@@ -13,9 +13,9 @@ import Header from './components/header/header.component';
 import SignInSignUpPage from './pages/sign-in-sign-up-page/sign-in-sign-up.component';
 import CheckoutPage from './pages/checkout/checkout.component';
 
-import {auth, createUserProfileDocument } from './firebase/firebase.utils';
-import {setCurrentUser} from './redux/user/user.actions';
 import { selectCurrentUser } from './redux/user/user.selector';
+
+import {checkUserSession} from './redux/user/user.actions';
 
 // import {selectCollectionsForPreview} from './redux/shop/shop.selectors';
 
@@ -29,26 +29,17 @@ class App extends React.Component {
 
   componentDidMount(){
 
-    const {setCurrentUser} = this.props;
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
-      if(userAuth){
-        const userRef = await createUserProfileDocument(userAuth);
+    const {checkUserSession} = this.props;
+    checkUserSession();
 
-        userRef.onSnapshot(snapShot => {
-          setCurrentUser({
-            currentUser:{
-              id: snapShot.id,
-              ...snapShot.data()
-            }
-          });
-        });
-      
-    }else{
-      setCurrentUser(userAuth);
-    } 
+
+
     //Did this so that we could add the shop data directly into firebase
     // addCollectionAndDocuments('collections',collectionsArray.map(({title, items}) => ({title, items}))); 
-  });
+  // });
+
+
+
   
 
   }
@@ -87,8 +78,9 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = dispatch => ({
-  
-  setCurrentUser: user => dispatch(setCurrentUser(user))
-});
+  checkUserSession: () => dispatch(checkUserSession())
+})
+
+
 
 export default connect(mapStateToProps,mapDispatchToProps)(App);
